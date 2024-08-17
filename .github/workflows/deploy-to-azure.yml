@@ -50,12 +50,12 @@ jobs:
     - name: Login to ACR
       uses: azure/docker-login@v2
       with:
-        login-server:  ${{ vars.ACR_NAME }}.azurecr.io
-        username: ${{ vars.ACR_USERNAME }}
+        login-server:  ${{ secrets.ACR_NAME }}.azurecr.io
+        username: ${{ secrets.ACR_USERNAME }}
         password: ${{ secrets.ACR_PASSWORD }}
 
     - name: Build and push Docker images
       run: |
-        docker build . -t ${{ vars.ACR_NAME }}.azurecr.io/conversion-challenge:${{ github.sha }}
-        docker push ${{ vars.ACR_NAME }}.azurecr.io/conversion-challenge:${{ github.sha }}
+        docker build . -t ${{ secrets.ACR_NAME }}.azurecr.io/conversion-challenge:${{ github.sha }}
+        docker push ${{ secrets.ACR_NAME }}.azurecr.io/conversion-challenge:${{ github.sha }}
 
