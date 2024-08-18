@@ -84,14 +84,13 @@ jobs:
       run: |
         az aks get-credentials --resource-group ${{ secrets.RESOURCE_GROUP }} --name ${{ secrets.AKS_CLUSTER_NAME }}
 
-    - name: Create Docker Registry Secret
-      run: |
-        kubectl create secret docker-registry acr-secret \
-          --docker-server=${{ secrets.ACR_NAME }}.azurecr.io \
-          --docker-username=${{ secrets.ACR_USERNAME }} \
-          --docker-password=${{ secrets.ACR_PASSWORD }} \
-          --docker-email=${{ secrets.DOCKER_EMAIL }} \
-          --dry-run=client -o yaml | kubectl apply -f -
+    - uses: Azure/k8s-create-secret@v4
+      with:
+        container-registry-url: ${{ secrets.ACR_NAME }}.azurecr.io
+        container-registry-username: ${{ secrets.ACR_USERNAME }}
+        container-registry-password: ${{ secrets.ACR_PASSWORD }}
+        secret-name: acr-auth
+
 
     - name: Create/Update ConfigMap and Secret
       run: |
