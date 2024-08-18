@@ -114,8 +114,8 @@ jobs:
     
     - name: Replace variables in Kubernetes manifest
       run: |
-      sed -i 's|${IMAGE_TAG}|${{ github.sha }}|g' k8s/conversion-deployment.yaml
-      sed -i 's|${ACR_NAME}|${{ secrets.ACR_NAME }}|g' k8s/conversion-deployment.yaml
+        sed -i 's|${IMAGE_TAG}|${{ github.sha }}|g' k8s/conversion-deployment.yaml
+        sed -i 's|${ACR_NAME}|${{ secrets.ACR_NAME }}|g' k8s/conversion-deployment.yaml
 
     - name: Deploy to AKS
       env:
