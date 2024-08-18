@@ -16,6 +16,8 @@ spec:
       - name: conversion-challenge
         image: ${ACR_NAME}.azurecr.io/conversion-challenge:${IMAGE_TAG}
         imagePullPolicy: IfNotPresent
+      imagePullSecrets:
+      - name: acr-secret
         ports:
         - containerPort: 8092
         envFrom:
