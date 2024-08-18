@@ -86,6 +86,8 @@ jobs:
 
     - name: Create Docker Registry Secret
       run: |
+        kubectl delete secret acr-secret --ignore-not-found
+        
         kubectl create secret docker-registry acr-secret \
           --docker-server=${{ secrets.ACR_NAME }}.azurecr.io \
           --docker-username=${{ secrets.ACR_USERNAME }} \
@@ -95,6 +97,8 @@ jobs:
 
     - name: Create/Update ConfigMap and Secret
       run: |
+        kubectl delete configmap general-config --ignore-not-found
+
         kubectl create configmap general-config \
           --from-literal=DB_USER=${{ secrets.DB_USER }} \
           --from-literal=DB_HOST=${{ secrets.DB_HOST }} \
@@ -106,8 +110,10 @@ jobs:
           --from-literal=RABBITMQ_DEFAULT_PASS=${{ secrets.RABBITMQ_DEFAULT_PASS }} \
           --dry-run=client -o yaml | kubectl apply -f -
 
+        kubectl delete secret general-secret --ignore-not-found
+        
         kubectl create secret generic general-secret \
-          --from-literal=SECRET_KEY=${{ secrets.DB_PASSWORD }} \
+          --from-literal=DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
           --dry-run=client -o yaml | kubectl apply -f -
     
     - name: Replace variables in Kubernetes manifest
