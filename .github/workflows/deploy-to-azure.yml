@@ -109,8 +109,6 @@ jobs:
         kubectl create secret generic general-secret \
           --from-literal=SECRET_KEY=${{ secrets.DB_PASSWORD }} \
           --dry-run=client -o yaml | kubectl apply -f -
-      env:
-        KUBECONFIG: ${{ secrets.KUBECONFIG }}
     
     - name: Replace variables in Kubernetes manifest
       run: |
@@ -118,8 +116,6 @@ jobs:
         sed -i 's|${ACR_NAME}|${{ secrets.ACR_NAME }}|g' k8s/conversion-deployment.yaml
 
     - name: Deploy to AKS
-      env:
-        KUBECONFIG: ${{ secrets.KUBECONFIG }}
       run: |
         kubectl apply -f k8s/conversion-deployment.yaml
         kubectl apply -f k8s/conversion-service.yaml
